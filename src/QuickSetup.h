@@ -11,4 +11,5 @@ void QuickSetup()
   ledcAttachPin(MOTR_Speed, 1);
   pinMode(TRIGGER_PIN,OUTPUT);
   pinMode(ECHO_PIN,INPUT);
+  attachInterrupt(digitalPinToInterrupt(ECHO_PIN),Ultrasonic_isr,CHANGE);
 }
