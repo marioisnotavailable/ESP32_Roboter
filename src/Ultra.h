@@ -8,11 +8,16 @@
 bool state = false;
 unsigned long long begin = 0;
 unsigned long long end = 0;
+unsigned long long start = 0;
 
-void Ultrasonic(int *distance)
+int Ultrasonic()
 {
-
     digitalWrite(TRIGGER_PIN, HIGH);
+    if (micros() - start >= 5)
+    {
+        digitalWrite(TRIGGER_PIN, LOW);
+    }
+    return (end - start) / 2 * 0.033; 
 }
 
 void IRAM_ATTR Ultrasonic_isr()
@@ -22,7 +27,5 @@ void IRAM_ATTR Ultrasonic_isr()
     }else if(state == true){
         end = micros();
     }
-    switch(state)
-    {
     state = !state;
 }

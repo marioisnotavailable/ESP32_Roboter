@@ -26,7 +26,6 @@ int batterie = 0;
 unsigned long long starttime = 0;
 int count = 0;
 int batteie_low_cont = 0;
-bool sleep_mode = false;
 
 BluetoothSerial SerialBT;
 CRGB leds[NUM_LEDS];
@@ -41,18 +40,11 @@ void VoltageMonitoring()
     count++;
     if (count == 200)
     {
-      batterie /=  200 * VOLTAGE_LEVEL * (R2 + R1) / R2;
+      batterie /= 200 * VOLTAGE_LEVEL * (R2 + R1) / R2;
       SerialBT.println(batterie);
       if (batterie < POWER_WARN_MODE)
       {
-        if (batterie <= POWER_OFF_MODE)
-        {
-          batteie_low_cont++;
-        }
-        else
-        {
-          batteie_low_cont = 0;
-        }
+
         for (int i = 0; i < NUM_LEDS; i++)
         {
           leds[i] = CRGB::Red;
@@ -66,6 +58,14 @@ void VoltageMonitoring()
           leds[i] = CRGB::Black;
         }
         FastLED.show();
+      }
+      if (batterie <= POWER_OFF_MODE)
+      {
+        batteie_low_cont++;
+      }
+      else
+      {
+        batteie_low_cont = 0;
       }
       count = 0;
       batterie = 0;
@@ -92,18 +92,18 @@ void VoltageMonitoring()
 
 if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) < PRECENT_25)
 {
-  
+
 }
 if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_25)
 {
-  
+
 }
 if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_75)
 {
-  
+
 }
 if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_100)
 {
-  
+
 }
 }*/
