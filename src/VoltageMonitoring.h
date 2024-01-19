@@ -41,10 +41,11 @@ void VoltageMonitoring()
     count++;
     if (count == 200)
     {
-      SerialBT.println(batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2);
-      if (batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2 < POWER_WARN_MODE)
+      batterie /=  200 * VOLTAGE_LEVEL * (R2 + R1) / R2;
+      SerialBT.println(batterie);
+      if (batterie < POWER_WARN_MODE)
       {
-        if (batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2 <= POWER_OFF_MODE)
+        if (batterie <= POWER_OFF_MODE)
         {
           batteie_low_cont++;
         }
