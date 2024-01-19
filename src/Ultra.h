@@ -5,16 +5,24 @@
 #define TRIGGER_PIN 25
 #define WAIT 4
 
-unsigned long long start = 0;
+bool state = false;
+unsigned long long begin = 0;
+unsigned long long end = 0;
 
-void Ultrasonic(int* distance){
-    
-    digitalWrite(TRIGGER_PIN,HIGH);
+void Ultrasonic(int *distance)
+{
+
+    digitalWrite(TRIGGER_PIN, HIGH);
 }
 
-void IRAM_ATTR Ultrasonic_isr(){
-   Switch(state){
-Case 0: begin = micros();Break;
-Case 1: end = micros(); Break;
-Default: Break;
+void IRAM_ATTR Ultrasonic_isr()
+{
+    if(state == false){
+        begin = micros();
+    }else if(state == true){
+        end = micros();
+    }
+    switch(state)
+    {
+    state = !state;
 }
