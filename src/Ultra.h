@@ -13,5 +13,8 @@ void Ultrasonic(int* distance){
 }
 
 void IRAM_ATTR Ultrasonic_isr(){
-
+   Switch(state){
+Case 0: begin = micros();Break;
+Case 1: end = micros(); Break;
+Default: Break;
 }
