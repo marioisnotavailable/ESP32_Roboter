@@ -11,7 +11,7 @@ unsigned long long begin = 0;
 unsigned long long end = 0;
 unsigned long long start = 0;
 int distance = 0;
-dapsdj9
+
 int Ultrasonic()
 {
     if (state2 == false)
