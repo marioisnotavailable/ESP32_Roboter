@@ -5,27 +5,34 @@
 #define TRIGGER_PIN 25
 #define WAIT 4
 
-bool state = false;
+bool state1 = false;
+bool state2 = false;
 unsigned long long begin = 0;
 unsigned long long end = 0;
 unsigned long long start = 0;
 
 int Ultrasonic()
 {
-    digitalWrite(TRIGGER_PIN, HIGH);
-    if (micros() - start >= 5)
+    if (state2 == false)
+    {
+        digitalWrite(TRIGGER_PIN, HIGH);
+    }
+    
+    if (micros() - start >= 4)
     {
         digitalWrite(TRIGGER_PIN, LOW);
+        state2 = true;
     }
     return (end - start) / 2 * 0.033; 
 }
 
 void IRAM_ATTR Ultrasonic_isr()
 {
-    if(state == false){
+    if(state1 == false){
         begin = micros();
-    }else if(state == true){
+    }else if(state1 == true){
         end = micros();
+        state2 = false;
     }
-    state = !state;
+    state1 = !state1;
 }
