@@ -10,6 +10,7 @@ bool state2 = false;
 unsigned long long begin = 0;
 unsigned long long end = 0;
 unsigned long long start = 0;
+int distance = 0;
 
 int Ultrasonic()
 {
@@ -23,7 +24,10 @@ int Ultrasonic()
         digitalWrite(TRIGGER_PIN, LOW);
         state2 = true;
     }
-    return (end - start) / 2 * 0.033; 
+    if(state2 == false){
+        distance = (end - start) / 2 * 0.033; 
+    }
+    return distance;
 }
 
 void IRAM_ATTR Ultrasonic_isr()
