@@ -6,6 +6,5 @@ void setup(){
 
 void loop(){
   VoltageMonitoring();
-  U
   //TODO Ultraschallsensor function 
 }
