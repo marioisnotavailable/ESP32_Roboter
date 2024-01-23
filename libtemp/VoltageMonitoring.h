@@ -1,5 +1,4 @@
 /*_______________Variables_______________*/
-
 #include <Arduino.h>
 #include <BluetoothSerial.h>
 #include <FastLED.h>
