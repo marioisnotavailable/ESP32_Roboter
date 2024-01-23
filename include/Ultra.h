@@ -1,4 +1,9 @@
-#include "libraryESP32.h"
+#include <Arduino.h>
+#include <FastLED.h>
+
+#define ECHO_PIN 26
+#define TRIGGER_PIN 25
+#define WAIT 4
 
 bool state1 = false;
 bool state2 = false;
