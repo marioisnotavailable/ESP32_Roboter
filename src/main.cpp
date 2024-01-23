@@ -1,6 +1,6 @@
 #include "QuickSetup.h"
 
-int distance = 0;
+int distanceSonic = 0;
 
 void setup(){
   QuickSetup();
