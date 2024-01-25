@@ -1,4 +1,11 @@
-#include "QuickSetup.h"
+#include <FastLED.h>
+#include <Arduino.h>
+#include <BluetoothSerial.h>
+
+#include "ESP32Library.h"
+
+extern BluetoothSerial SerialBT;
+extern CRGB leds[NUM_LEDS];
 
 int distanceSonic = 0;
 
@@ -7,7 +14,8 @@ void setup(){
 }
 
 void loop(){
+  //leds[1] = CRGB::Black;
   VoltageMonitoring();
-  distance = Ultrasonic();
-  SerialBT.println(distance);
+  distanceSonic = Ultrasonic();
+  //SerialBT.println(distanceSonic);
 }
