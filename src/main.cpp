@@ -6,8 +6,8 @@
 
 extern BluetoothSerial SerialBT;
 extern CRGB leds[NUM_LEDS];
+extern float distance;
 
-float distanceSonic = 0;
 unsigned long long starttimee = 0;
 
 void setup(){
@@ -17,10 +17,10 @@ void setup(){
 void loop(){
  LoadingProgramm();
   VoltageMonitoring();
-  distanceSonic = Ultrasonic();
+  Ultrasonic();
   Linefollowerfn();
   if(millis() - starttimee > 1000){
-    SerialBT.println(distanceSonic);
+    SerialBT.println(distance);
     starttimee = millis();
   }
 }

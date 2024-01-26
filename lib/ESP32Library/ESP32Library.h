@@ -33,7 +33,7 @@
 #define LF_Right_Left 12
 
 void QuickSetup();
-float Ultrasonic();
+void Ultrasonic();
 void IRAM_ATTR Ultrasonic_isr();
 void VoltageMonitoring();
 void Linefollowerfn();

@@ -35,7 +35,7 @@ void QuickSetup()
   pinMode(LINEFOLLOW,INPUT);
 }
 
-float Ultrasonic()
+void Ultrasonic()
 {
   if (state2 == false)
   {
@@ -48,7 +48,6 @@ float Ultrasonic()
     state2 = true;
     start = micros();
   }
-  return distance;
 }
 
 void IRAM_ATTR Ultrasonic_isr()
