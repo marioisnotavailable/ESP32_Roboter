@@ -2,12 +2,11 @@
 
 bool state1 = false;
 bool state2 = false;
-unsigned long long begin = 0;
-unsigned long long start = 0;
+unsigned long begin = 0;
+unsigned long start = 0;
 float distance = 0;
 
-int batterie = 0;
-unsigned long long starttime = 0;
+unsigned long starttime = 0;
 int count = 0;
 int batterie_low_cont = 0;
 float newbatterie = 0;
@@ -68,11 +67,11 @@ void VoltageMonitoring()
 {
   if (millis() - starttime >= WAITTIME)
   {
-    batterie += analogRead(ADC_UB);
+    newbatterie += analogRead(ADC_UB);
     count++;
     if (count >= 200)
     {
-      newbatterie = batterie / 200 * (VOLTAGE_LEVEL * (R2 + R1) / R2);
+      newbatterie = newbatterie / 200 * (VOLTAGE_LEVEL * (R2 + R1) / R2);
       SerialBT.print(newbatterie);
       SerialBT.println("V");
       if (newbatterie < POWER_WARN_MODE)
@@ -101,7 +100,7 @@ void VoltageMonitoring()
         batterie_low_cont = 0;
       }
       count = 0;
-      batterie = 0;
+      newbatterie = 0;
     }
     starttime = millis();
   }
@@ -122,7 +121,7 @@ void VoltageMonitoring()
 void LoadingProgramm()
 {
 
-  if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_25)
+  if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_25)
   {
     for (int i = 0; i < NUM_LEDS; i++)
     {
@@ -130,7 +129,7 @@ void LoadingProgramm()
     }
     FastLED.show();
   }
-  else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_50)
+  else if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_50)
   {
     for (int i = 0; i < NUM_LEDS; i++)
     {
@@ -138,7 +137,7 @@ void LoadingProgramm()
     }
     FastLED.show();
   }
-  else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_75)
+  else if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_75)
   {
     for (int i = 0; i < NUM_LEDS; i++)
     {
@@ -146,7 +145,7 @@ void LoadingProgramm()
     }
     FastLED.show();
   }
-  else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_100)
+  else if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_100)
   {
     for (int i = 0; i < NUM_LEDS; i++)
     {

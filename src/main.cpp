@@ -8,7 +8,7 @@ extern BluetoothSerial SerialBT;
 extern CRGB leds[NUM_LEDS];
 extern float distance;
 
-unsigned long long starttimee = 0;
+unsigned long starttimee = 0;
 
 void setup()
 {
