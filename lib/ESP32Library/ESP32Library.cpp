@@ -21,18 +21,18 @@ void QuickSetup()
 {
   SerialBT.begin("ESP_von_Nici");
   FastLED.addLeds<SK9822, DATA_PIN, CLOCK_PIN, RBG>(leds, NUM_LEDS);
-  pinMode(ADC_UB,INPUT);
+  pinMode(ADC_UB, INPUT);
   ledcSetup(0, 16000, 10);
   ledcSetup(1, 16000, 10);
   ledcAttachPin(MOTL_Speed, 0);
   ledcAttachPin(MOTR_Speed, 1);
   pinMode(TRIGGER_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
-  pinMode(MOTR_DIR,OUTPUT);
-  pinMode(MOTL_DIR,OUTPUT);
+  pinMode(MOTR_DIR, OUTPUT);
+  pinMode(MOTL_DIR, OUTPUT);
   attachInterrupt(digitalPinToInterrupt(ECHO_PIN), Ultrasonic_isr, CHANGE);
-  pinMode(LF_Right_Left,OUTPUT);
-  pinMode(LINEFOLLOW,INPUT);
+  pinMode(LF_Right_Left, OUTPUT);
+  pinMode(LINEFOLLOW, INPUT);
 }
 
 void Ultrasonic()
@@ -74,7 +74,7 @@ void VoltageMonitoring()
     {
       newbatterie = batterie / 200 * (VOLTAGE_LEVEL * (R2 + R1) / R2);
       SerialBT.print(newbatterie);
-      SerialBT.println("V"); 
+      SerialBT.println("V");
       if (newbatterie < POWER_WARN_MODE)
       {
 
@@ -119,58 +119,69 @@ void VoltageMonitoring()
   }
 }
 
-void LoadingProgramm(){
+void LoadingProgramm()
+{
 
-if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_25)
-{
-for (int i = 0; i < NUM_LEDS; i++)
-        {
-          leds[i] = CRGB::Orange;
-        }
-        FastLED.show();
-}
-else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_50)
-{
-for (int i = 0; i < NUM_LEDS; i++)
-        {
-          leds[i] = CRGB::Yellow;
-        }
-        FastLED.show();
-}
-else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_75)
-{
-for (int i = 0; i < NUM_LEDS; i++)
-        {
-          leds[i] = CRGB::LightGreen;
-        }
-        FastLED.show();
-}
-else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_100)
-{
-for (int i = 0; i < NUM_LEDS; i++)
-        {
-          leds[i] = CRGB::Green;
-        }
-        FastLED.show();
-}
+  if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_25)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = CRGB::Orange;
+    }
+    FastLED.show();
+  }
+  else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_50)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = CRGB::Yellow;
+    }
+    FastLED.show();
+  }
+  else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_75)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = CRGB::LightGreen;
+    }
+    FastLED.show();
+  }
+  else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_100)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = CRGB::Green;
+    }
+    FastLED.show();
+  }
 }
 
-void Linefollowerfn(){
-     if(status == false){
-        status = !status;
-        digitalWrite(LF_Right_Left,HIGH);
-        if(analogRead(LINEFOLLOW) > 1500){
-          ledcWrite(MOTR_Speed,1000);
-        }else{
-          ledcWrite(MOTR_Speed,0);
-        }
-     }else{
-        status = !status;
-        digitalWrite(LF_Right_Left,LOW);
-        if(analogRead(LINEFOLLOW) > 1500){
-          ledcWrite(MOTL_Speed,1000);
-        }else{
-          ledcWrite(MOTL_Speed,0);
-        }
-     }
+void Linefollowerfn()
+{
+  if (status == false)
+  {
+    status = !status;
+    digitalWrite(LF_Right_Left, HIGH);
+    if (analogRead(LINEFOLLOW) > 1500)
+    {
+      ledcWrite(MOTR_Speed, 1000);
+    }
+    else
+    {
+      ledcWrite(MOTR_Speed, 0);
+    }
+  }
+  else
+  {
+    status = !status;
+    digitalWrite(LF_Right_Left, LOW);
+    if (analogRead(LINEFOLLOW) > 1500)
+    {
+      ledcWrite(MOTL_Speed, 1000);
+    }
+    else
+    {
+      ledcWrite(MOTL_Speed, 0);
+    }
+  }
 }

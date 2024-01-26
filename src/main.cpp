@@ -10,16 +10,19 @@ extern float distance;
 
 unsigned long long starttimee = 0;
 
-void setup(){
+void setup()
+{
   QuickSetup();
 }
 
-void loop(){
- LoadingProgramm();
+void loop()
+{
+  LoadingProgramm();
   VoltageMonitoring();
   Ultrasonic();
   Linefollowerfn();
-  if(millis() - starttimee > 1000){
+  if (millis() - starttimee > 1000)
+  {
     SerialBT.println(distance);
     starttimee = millis();
   }
