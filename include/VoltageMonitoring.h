@@ -7,10 +7,10 @@
 #define DATA_PIN 23
 #define CLOCK_PIN 18
 #define ADC_UB 39
-#define VOLTAGE_LEVEL 3.3 / 4095
+#define VOLTAGE_LEVEL (3.3 / 4095)
 #define POWER_WARN_MODE 3.6
 #define R1 47000
-#define R2 98000
+#define R2 100000
 #define POWER_OFF_MODE 3.3
 #define WAITTIME 5
 #define MOTL_Speed 32
@@ -22,6 +22,7 @@
 #define PRECENT_100 4
 
 int batterie = 0;
+float newbatterie = 0;
 unsigned long long starttime = 0;
 int count = 0;
 int batteie_low_cont = 0;
@@ -37,11 +38,12 @@ void VoltageMonitoring()
   {
     batterie += analogRead(ADC_UB);
     count++;
-    if (count == 200)
+    if (count >= 200)
     {
-      batterie /= 200 * VOLTAGE_LEVEL * (R2 + R1) / R2;
-      SerialBT.println(batterie);
-      if (batterie < POWER_WARN_MODE)
+      newbatterie = batterie / 200 * (VOLTAGE_LEVEL * (R2 + R1) / R2);
+      SerialBT.println(newbatterie);
+      SerialBT.print("V"); 
+      if (newbatterie < POWER_WARN_MODE)
       {
 
         for (int i = 0; i < NUM_LEDS; i++)
@@ -58,7 +60,7 @@ void VoltageMonitoring()
         }
         FastLED.show();
       }
-      if (batterie <= POWER_OFF_MODE)
+      if (newbatterie <= POWER_OFF_MODE)
       {
         batteie_low_cont++;
       }
@@ -88,22 +90,22 @@ void VoltageMonitoring()
 //TODO LoadingProgramm fertig machen
 /*_______________Loading Programm_______________*/
 
-/*void LoadingProgramm(){
+void LoadingProgramm(){
 
-if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) < PRECENT_25)
-{
-
-}
 if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_25)
 {
 
 }
-if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_75)
+else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_50)
 {
 
 }
-if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_100)
+else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_75)
 {
 
 }
-}*/
+else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_100)
+{
+
+}
+}
