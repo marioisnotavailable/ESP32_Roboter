@@ -8,17 +8,18 @@ float distance = 0;
 
 unsigned long starttime = 0;
 int count = 0;
-int batterie_low_cont = 0;
+char batterie_low_cont = 0;
 float newbatterie = 0;
 
 bool status = false;
+char richtung = 0;
 
 BluetoothSerial SerialBT;
 CRGB leds[NUM_LEDS];
 
 void QuickSetup()
 {
-  SerialBT.begin("ESP_von_Nici");
+  SerialBT.begin("ESP_von_Mario");
   FastLED.addLeds<SK9822, DATA_PIN, CLOCK_PIN, RBG>(leds, NUM_LEDS);
   pinMode(ADC_UB, INPUT);
   ledcSetup(0, 16000, 10);
@@ -32,6 +33,8 @@ void QuickSetup()
   attachInterrupt(digitalPinToInterrupt(ECHO_PIN), Ultrasonic_isr, CHANGE);
   pinMode(LF_Right_Left, OUTPUT);
   pinMode(LINEFOLLOW, INPUT);
+  digitalWrite(MOTR_DIR, HIGH);
+  digitalWrite(MOTL_DIR, LOW);
 }
 
 void Ultrasonic()
@@ -157,17 +160,25 @@ void LoadingProgramm()
 
 void Linefollowerfn()
 {
+  if(distance < 10){
+    ledcWrite(1, 0);
+    ledcWrite(0, 0);
+  }
   if (status == false)
   {
     status = !status;
     digitalWrite(LF_Right_Left, HIGH);
     if (analogRead(LINEFOLLOW) > 1500)
     {
-      ledcWrite(MOTR_Speed, 1000);
+      if(richtung != 2){
+        richtung = 0;
+      }
     }
     else
     {
-      ledcWrite(MOTR_Speed, 0);
+      if(richtung != 2){
+        richtung = 1;
+      }
     }
   }
   else
@@ -176,11 +187,32 @@ void Linefollowerfn()
     digitalWrite(LF_Right_Left, LOW);
     if (analogRead(LINEFOLLOW) > 1500)
     {
-      ledcWrite(MOTL_Speed, 1000);
+      if(richtung != 1){
+        richtung = 0;
+      }
     }
     else
     {
-      ledcWrite(MOTL_Speed, 0);
+      if(richtung != 1){
+        richtung = 2;
+      }
     }
+  }
+  switch (richtung)
+  {
+  case 0:
+    ledcWrite(1, 1024);
+    ledcWrite(0, 1024);
+    break;
+  case 1:
+    ledcWrite(0, 1024);
+    ledcWrite(1, 512);
+    break;
+  case 2:
+    ledcWrite(1, 1024);
+    ledcWrite(0, 512);
+    break;
+  default:
+    break;
   }
 }
