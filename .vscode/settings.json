@@ -3,5 +3,6 @@
     "git.ignoreMissingGitWarning": true,
     "git.enabled": true,
     "git.path": "D:\\installables\\PortableGit\\mingw64\\bin\\git.exe",
-    "terminal.integrated.shell.windows": "D:\\installables\\PortableGit\\bin\\bash.exe"
+    "terminal.integrated.shell.windows": "D:\\installables\\PortableGit\\bin\\bash.exe",
+    "cmake.configureOnOpen": false
 }
