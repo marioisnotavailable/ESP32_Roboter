@@ -19,7 +19,7 @@ CRGB leds[NUM_LEDS];
 
 void QuickSetup()
 {
-  SerialBT.begin("ESP_von_Mario");
+  SerialBT.begin("ESP_von_mario");
   FastLED.addLeds<SK9822, DATA_PIN, CLOCK_PIN, RBG>(leds, NUM_LEDS);
   pinMode(ADC_UB, INPUT);
   ledcSetup(0, 16000, 10);
@@ -72,6 +72,7 @@ void VoltageMonitoring()
   {
     newbatterie += analogRead(ADC_UB);
     count++;
+    SerialBT.print("a");
     if (count >= 200)
     {
       newbatterie = newbatterie / 200 * (VOLTAGE_LEVEL * (R2 + R1) / R2);
@@ -90,7 +91,7 @@ void VoltageMonitoring()
       {
         for (int i = 0; i < NUM_LEDS; i++)
         {
-          leds[i] = CRGB::Black;
+          leds[i] = CRGB::Green;
         }
         FastLED.show();
       }
