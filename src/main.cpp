@@ -15,7 +15,7 @@ int i = 250;
 
 
 void setup(){
-  QuickSetup();
+  QuickSetup("ESP von Mario");
   digitalWrite(MOTL_DIR,LOW);
   digitalWrite(MOTR_DIR,HIGH);
 }

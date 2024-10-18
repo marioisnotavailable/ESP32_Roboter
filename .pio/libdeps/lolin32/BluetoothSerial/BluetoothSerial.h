@@ -16,7 +16,7 @@ class BluetoothSerial : public Stream {
 public:
     BluetoothSerial(PinName tx, PinName rx);
     
-    /**
+    /*
      * Setup bluetooth module(serial port baud rate)
      */
     void setup();

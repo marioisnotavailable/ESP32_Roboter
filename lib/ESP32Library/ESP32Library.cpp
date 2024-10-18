@@ -17,9 +17,9 @@ char richtung = 0;
 BluetoothSerial SerialBT;
 CRGB leds[NUM_LEDS];
 
-void QuickSetup()
+void QuickSetup(char* a)
 {
-  SerialBT.begin("ESP_von_mario");
+  SerialBT.begin(a);
   FastLED.addLeds<SK9822, DATA_PIN, CLOCK_PIN, RBG>(leds, NUM_LEDS);
   pinMode(ADC_UB, INPUT);
   ledcSetup(0, 16000, 10);
