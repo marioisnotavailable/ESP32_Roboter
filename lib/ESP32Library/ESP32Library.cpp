@@ -17,7 +17,7 @@ char richtung = 0;
 BluetoothSerial SerialBT;
 CRGB leds[NUM_LEDS];
 
-void QuickSetup(char* a)
+void begin(char const *a)
 {
   SerialBT.begin(a);
   FastLED.addLeds<SK9822, DATA_PIN, CLOCK_PIN, RBG>(leds, NUM_LEDS);

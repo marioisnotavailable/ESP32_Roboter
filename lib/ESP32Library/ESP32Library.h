@@ -15,10 +15,12 @@
 #define R2 90000
 #define POWER_OFF_MODE 3.3
 #define WAITTIME 5
+
 #define MOTL_Speed 32
 #define MOTR_Speed 2
 #define MOTL_DIR 33
 #define MOTR_DIR 15
+
 #define ENERGY_LED 1
 #define PRECENT_25 3.525
 #define PRECENT_50 3.75
@@ -32,7 +34,16 @@
 #define LINEFOLLOW 36
 #define LF_Right_Left 12
 
-void QuickSetup();
+class Setup
+{
+private:
+    char const *a;
+public:
+
+};
+
+
+void begin(char const *);
 void Ultrasonic();
 void IRAM_ATTR Ultrasonic_isr();
 void VoltageMonitoring();
