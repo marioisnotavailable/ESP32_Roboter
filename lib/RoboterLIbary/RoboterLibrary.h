@@ -1,5 +1,5 @@
-#ifndef ESPLIBRARY_H
-#define ESPLIBRARY_H
+#ifndef ROBOTERLIBRARY_H
+#define ROBOTERLIBRARY_H
 
 #include <FastLED.h>
 #include <Arduino.h>
@@ -64,4 +64,4 @@ public:
     void LoadingProgramm();
 };
 
-#endif // ESPLIBRARY_H
+#endif // ROBOTERLIBRARY_H
