@@ -4,5 +4,16 @@
     "git.enabled": true,
     "git.path": "D:\\installables\\PortableGit\\mingw64\\bin\\git.exe",
     "terminal.integrated.shell.windows": "D:\\installables\\PortableGit\\bin\\bash.exe",
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "files.associations": {
+        "array": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "iterator": "cpp"
+    }
 }

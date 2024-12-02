@@ -34,20 +34,34 @@
 #define LINEFOLLOW 36
 #define LF_Right_Left 12
 
-class Setup
+void IRAM_ATTR Ultrasonic_isr();
+class Roboter
 {
 private:
     char const *a;
+
+    unsigned long start = 0;
+    unsigned long starttime = 0;
+    int count = 0;
+    char batterie_low_cont = 0;
+    float newbatterie = 0;
+    bool status = false;
+    char richtung = 0;
+
 public:
+    Roboter():a("Roboter von Robert"){};
+    Roboter(char const *);
 
+    static bool state1;
+    static bool state2;
+    static unsigned long begin;
+    static float distance;
+
+    void Start();
+    void Ultrasonic();
+    void VoltageMonitoring();
+    void Linefollowerfn();
+    void LoadingProgramm();
 };
-
-
-void begin(char const *);
-void Ultrasonic();
-void IRAM_ATTR Ultrasonic_isr();
-void VoltageMonitoring();
-void Linefollowerfn();
-void LoadingProgramm();
 
 #endif // ESPLIBRARY_H

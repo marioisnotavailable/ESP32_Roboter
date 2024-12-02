@@ -1,23 +1,18 @@
 #include "ESP32Library.h"
 
-bool state1 = false;
-bool state2 = false;
-unsigned long begin = 0;
-unsigned long start = 0;
-float distance = 0;
-
-unsigned long starttime = 0;
-int count = 0;
-char batterie_low_cont = 0;
-float newbatterie = 0;
-
-bool status = false;
-char richtung = 0;
-
 BluetoothSerial SerialBT;
 CRGB leds[NUM_LEDS];
 
-void begin(char const *a)
+bool Roboter::state1 = false;
+bool Roboter::state2 = false;
+unsigned long Roboter::begin = 0;
+float Roboter::distance = 0;
+
+Roboter::Roboter(char const *name){
+  a = name;
+}
+
+void Roboter::Start()
 {
   SerialBT.begin(a);
   FastLED.addLeds<SK9822, DATA_PIN, CLOCK_PIN, RBG>(leds, NUM_LEDS);
@@ -37,7 +32,7 @@ void begin(char const *a)
   digitalWrite(MOTL_DIR, LOW);
 }
 
-void Ultrasonic()
+void Roboter::Ultrasonic()
 {
   if (state2 == false)
   {
@@ -54,19 +49,19 @@ void Ultrasonic()
 
 void IRAM_ATTR Ultrasonic_isr()
 {
-  if (state1 == false)
+  if (Roboter::state1 == false)
   {
-    begin = micros();
+    Roboter::begin = micros();
   }
-  if (state1 == true)
+  if (Roboter::state1 == true)
   {
-    distance = (micros() - begin) / 2 * 0.033;
-    state2 = false;
+    Roboter::distance = (micros() - Roboter::begin) / 2 * 0.033;
+    Roboter::state2 = false;
   }
-  state1 = !state1;
+  Roboter::state1 = !Roboter::state1;
 }
 
-void VoltageMonitoring()
+void Roboter::VoltageMonitoring()
 {
   if (millis() - starttime >= WAITTIME)
   {
@@ -122,7 +117,7 @@ void VoltageMonitoring()
   }
 }
 
-void LoadingProgramm()
+void Roboter::LoadingProgramm()
 {
 
   if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_25)
@@ -159,7 +154,7 @@ void LoadingProgramm()
   }
 }
 
-void Linefollowerfn()
+void Roboter::Linefollowerfn()
 {
   if(distance < 10){
     ledcWrite(1, 0);
