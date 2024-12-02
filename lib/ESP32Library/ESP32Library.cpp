@@ -47,18 +47,18 @@ void Roboter::Ultrasonic()
   }
 }
 
-void IRAM_ATTR Ultrasonic_isr()
+void IRAM_ATTR Roboter::Ultrasonic_isr()
 {
-  if (Roboter::state1 == false)
+  if (state1 == false)
   {
-    Roboter::begin = micros();
+    begin = micros();
   }
-  if (Roboter::state1 == true)
+  if (state1 == true)
   {
-    Roboter::distance = (micros() - Roboter::begin) / 2 * 0.033;
-    Roboter::state2 = false;
+    distance = (micros() - begin) / 2 * 0.033;
+    state2 = false;
   }
-  Roboter::state1 = !Roboter::state1;
+  state1 = !state1;
 }
 
 void Roboter::VoltageMonitoring()

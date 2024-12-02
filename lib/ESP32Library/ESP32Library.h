@@ -33,13 +33,16 @@
 
 #define LINEFOLLOW 36
 #define LF_Right_Left 12
-
-void IRAM_ATTR Ultrasonic_isr();
 class Roboter
 {
 private:
     char const *a;
 
+    static bool state1;
+    static bool state2;
+    static unsigned long begin;
+    static float distance;
+    
     unsigned long start = 0;
     unsigned long starttime = 0;
     int count = 0;
@@ -52,10 +55,7 @@ public:
     Roboter():a("Roboter von Robert"){};
     Roboter(char const *);
 
-    static bool state1;
-    static bool state2;
-    static unsigned long begin;
-    static float distance;
+    static void IRAM_ATTR Ultrasonic_isr();
 
     void Start();
     void Ultrasonic();
