@@ -13,6 +13,5 @@ void setup(){
 }
 
 void loop(){
-  Roby.VoltageMonitoring();
-  Roby.Ultrasonic();
+  Roby.loop();
 }

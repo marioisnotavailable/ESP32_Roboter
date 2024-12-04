@@ -33,6 +33,7 @@
 
 #define LINEFOLLOW 36
 #define LF_Right_Left 12
+
 class Roboter
 {
 private:
@@ -43,16 +44,25 @@ private:
     static unsigned long begin;
     static float distance;
     
-    unsigned long start = 0;
-    unsigned long starttime = 0;
-    int count = 0;
-    char batterie_low_cont = 0;
-    float newbatterie = 0;
-    bool status = false;
-    char richtung = 0;
+    unsigned long start;
+    unsigned long starttime;
+    int count;
+    char batterie_low_cont;
+    float batterie;
+    bool status;
+    char richtung;
 
 public:
-    Roboter():a("Roboter von Robert"){};
+    Roboter(){
+        a = "Roboter von Robert";
+        start = 0;
+        starttime = 0;
+        count = 0;
+        batterie_low_cont = 0;
+        batterie = 0;
+        status = false;
+        richtung = 0;
+    };
     Roboter(char const *);
 
     static void IRAM_ATTR Ultrasonic_isr();
@@ -62,6 +72,13 @@ public:
     void VoltageMonitoring();
     void Linefollowerfn();
     void LoadingProgramm();
+
+    void loop(){
+        Ultrasonic();
+        VoltageMonitoring();
+        Linefollowerfn();
+        LoadingProgramm();
+    }
 };
 
 #endif // ROBOTERLIBRARY_H

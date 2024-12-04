@@ -63,17 +63,18 @@ void IRAM_ATTR Roboter::Ultrasonic_isr()
 
 void Roboter::VoltageMonitoring()
 {
-  if (millis() - starttime >= WAITTIME)
+  do
   {
-    newbatterie += analogRead(ADC_UB);
+    if (millis() - starttime >= WAITTIME)
+  {
+    batterie += analogRead(ADC_UB);
     count++;
-    SerialBT.print("a");
     if (count >= 200)
     {
-      newbatterie = newbatterie / 200 * (VOLTAGE_LEVEL * (R2 + R1) / R2);
-      SerialBT.print(newbatterie);
+      batterie = batterie / 200 * (VOLTAGE_LEVEL * (R2 + R1) / R2);
+      SerialBT.print(batterie);
       SerialBT.println("V");
-      if (newbatterie < POWER_WARN_MODE)
+      if (batterie < POWER_WARN_MODE)
       {
 
         for (int i = 0; i < NUM_LEDS; i++)
@@ -90,7 +91,7 @@ void Roboter::VoltageMonitoring()
         }
         FastLED.show();
       }
-      if (newbatterie <= POWER_OFF_MODE)
+      if (batterie <= POWER_OFF_MODE)
       {
         batterie_low_cont++;
       }
@@ -99,7 +100,7 @@ void Roboter::VoltageMonitoring()
         batterie_low_cont = 0;
       }
       count = 0;
-      newbatterie = 0;
+      batterie = 0;
     }
     starttime = millis();
   }
@@ -115,12 +116,13 @@ void Roboter::VoltageMonitoring()
     esp_sleep_enable_timer_wakeup(4000000);
     esp_deep_sleep_start();
   }
+  } while (batterie_low_cont <= 3);
 }
 
 void Roboter::LoadingProgramm()
 {
 
-  if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_25)
+  if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_25)
   {
     for (int i = 0; i < NUM_LEDS; i++)
     {
@@ -128,7 +130,7 @@ void Roboter::LoadingProgramm()
     }
     FastLED.show();
   }
-  else if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_50)
+  else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_50)
   {
     for (int i = 0; i < NUM_LEDS; i++)
     {
@@ -136,7 +138,7 @@ void Roboter::LoadingProgramm()
     }
     FastLED.show();
   }
-  else if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_75)
+  else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_75)
   {
     for (int i = 0; i < NUM_LEDS; i++)
     {
@@ -144,7 +146,7 @@ void Roboter::LoadingProgramm()
     }
     FastLED.show();
   }
-  else if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_100)
+  else if ((batterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_100)
   {
     for (int i = 0; i < NUM_LEDS; i++)
     {
