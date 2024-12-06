@@ -10,6 +10,13 @@ float Roboter::distance = 0;
 
 Roboter::Roboter(char const *name){
   a = name;
+  start = 0;
+  starttime = 0;
+  count = 0;
+  batterie_low_cont = 0;
+  batterie = 0;
+  status = false;
+  richtung = 0;
 }
 
 void Roboter::Start()
@@ -116,7 +123,7 @@ void Roboter::VoltageMonitoring()
     esp_sleep_enable_timer_wakeup(4000000);
     esp_deep_sleep_start();
   }
-  } while (batterie_low_cont <= 3);
+  } while (batterie_low_cont >= 3);
 }
 
 void Roboter::LoadingProgramm()

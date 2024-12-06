@@ -72,13 +72,6 @@ public:
     void VoltageMonitoring();
     void Linefollowerfn();
     void LoadingProgramm();
-
-    void loop(){
-        Ultrasonic();
-        VoltageMonitoring();
-        Linefollowerfn();
-        LoadingProgramm();
-    }
 };
 
 #endif // ROBOTERLIBRARY_H
