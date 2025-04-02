@@ -4,6 +4,7 @@
 #include <ArduinoOTA.h>
 #include <WiFi.h>
 
+#include "WiFiconfig.h"
 #include "RoboterLibrary.h"
 
 Roboter Roby("Roboter von Mario");
@@ -75,15 +76,15 @@ void OTA(void *parameter)
 }
 
 void initWiFi(){
-  WiFi.mode(WIFI_AP);
-  WiFi.softAP("MARIO","12345678");
-  /*
+  WiFi.mode(WIFI_STA);
+  WiFi.softAP(WIFI_SSID,WIFI_PASSWORD);
+
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print('.');
     delay(1000);
   }
-  */
-  Serial.println(WiFi.softAPIP().toString());
+  
+  Serial.println(WiFi.localIP().toString());
 }
 
 void loopTelnet(){
