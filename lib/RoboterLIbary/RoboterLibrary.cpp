@@ -8,8 +8,8 @@ bool Roboter::state2 = false;
 unsigned long Roboter::begin = 0;
 float Roboter::distance = 0;
 
-Roboter::Roboter(const char *name) {
-    a = name;
+Roboter::Roboter(char const *name){
+  a = name;
 }
 
 void Roboter::Start() {
@@ -53,42 +53,95 @@ void IRAM_ATTR Roboter::Ultrasonic_isr() {
     state1 = !state1;
 }
 
-void Roboter::VoltageMonitoring() {
-    if (millis() - starttime >= WAITTIME) {
-        newbatterie += analogRead(ADC_UB);
-        count++;
-        SerialBT.print("a");
-        if (count >= 200) {
-            newbatterie = newbatterie / 200 * (VOLTAGE_LEVEL * (R2 + R1) / R2);
-            SerialBT.print(newbatterie);
-            SerialBT.println("V");
-            CRGB color = (newbatterie < POWER_WARN_MODE) ? CRGB::Red : CRGB::Green;
-            fill_solid(leds, NUM_LEDS, color);
-            FastLED.show();
+void Roboter::VoltageMonitoring()
+{
+  if (millis() - starttime >= WAITTIME)
+  {
+    newbatterie += analogRead(ADC_UB);
+    count++;
+    SerialBT.print("a");
+    if (count >= 200)
+    {
+      newbatterie = newbatterie / 200 * (VOLTAGE_LEVEL * (R2 + R1) / R2);
+      SerialBT.print(newbatterie);
+      SerialBT.println("V");
+      if (newbatterie < POWER_WARN_MODE)
+      {
 
-            batterie_low_cont = (newbatterie <= POWER_OFF_MODE) ? batterie_low_cont + 1 : 0;
-            count = 0;
-            newbatterie = 0;
+        for (int i = 0; i < NUM_LEDS; i++)
+        {
+          leds[i] = CRGB::Red;
         }
-        starttime = millis();
-    }
-    if (batterie_low_cont >= 3) {
-        fill_solid(leds, NUM_LEDS, CRGB::Black);
         FastLED.show();
-        ledcWrite(0, 0);
-        ledcWrite(1, 0);
-        esp_sleep_enable_timer_wakeup(4000000);
-        esp_deep_sleep_start();
+      }
+      else
+      {
+        for (int i = 0; i < NUM_LEDS; i++)
+        {
+          leds[i] = CRGB::Green;
+        }
+        FastLED.show();
+      }
+      if (newbatterie <= POWER_OFF_MODE)
+      {
+        batterie_low_cont++;
+      }
+      else
+      {
+        batterie_low_cont = 0;
+      }
+      count = 0;
+      newbatterie = 0;
     }
+    starttime = millis();
+  }
+  if (batterie_low_cont >= 3)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = CRGB::Black;
+    }
+    FastLED.show();
+    ledcWrite(0, 0);
+    ledcWrite(1, 0);
+    esp_sleep_enable_timer_wakeup(4000000);
+    esp_deep_sleep_start();
+  }
 }
 
-void Roboter::LoadingProgramm() {
-    float voltage = newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2;
-    CRGB color = (voltage >= PRECENT_100) ? CRGB::Green :
-                 (voltage >= PRECENT_75) ? CRGB::LightGreen :
-                 (voltage >= PRECENT_50) ? CRGB::Yellow :
-                 CRGB::Orange;
-    fill_solid(leds, NUM_LEDS, color);
+void Roboter::LoadingProgramm()
+{
+
+  if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_25)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = CRGB::Orange;
+    }
+    FastLED.show();
+  }
+  else if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_50)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = CRGB::Yellow;
+    }
+    FastLED.show();
+  }
+  else if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_75)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = CRGB::LightGreen;
+    }
+    FastLED.show();
+  }
+  else if ((newbatterie / 200 * VOLTAGE_LEVEL * (R2 + R1) / R2) >= PRECENT_100)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = CRGB::Green;
+    }
     FastLED.show();
 }
 

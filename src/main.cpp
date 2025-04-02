@@ -27,6 +27,7 @@ void setup(){
 }
 
 void loop(){
+<<<<<<< HEAD
   ArduinoOTA.handle();
 
   Roby.VoltageMonitoring();
@@ -38,4 +39,6 @@ void loop(){
     digitalWrite(LF_Right_Left, !digitalRead(LF_Right_Left));
   }
 
+=======
+>>>>>>> e9049d50bd97466c593050f338ae3afb8a73ab61
 }

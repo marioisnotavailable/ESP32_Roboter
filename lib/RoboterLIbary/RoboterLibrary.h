@@ -32,6 +32,14 @@
 
 #define LINEFOLLOW 36
 #define LF_Right_Left 12
+<<<<<<< HEAD
+=======
+
+class Roboter
+{
+private:
+    char const *a;
+>>>>>>> e9049d50bd97466c593050f338ae3afb8a73ab61
 
 class Roboter {
 private:
@@ -39,6 +47,7 @@ private:
     static bool state1, state2;
     static unsigned long begin;
     static float distance;
+<<<<<<< HEAD
     unsigned long start = 0, starttime = 0;
     int count = 0;
     uint8_t batterie_low_cont = 0;
@@ -49,6 +58,30 @@ private:
 public:
     Roboter() : a("Robo") {}
     Roboter(const char *);
+=======
+    
+    unsigned long start;
+    unsigned long starttime;
+    int count;
+    char batterie_low_cont;
+    float batterie;
+    bool status;
+    char richtung;
+
+public:
+    Roboter(){
+        a = "Roboter von Robert";
+        start = 0;
+        starttime = 0;
+        count = 0;
+        batterie_low_cont = 0;
+        batterie = 0;
+        status = false;
+        richtung = 0;
+    };
+    Roboter(char const *);
+
+>>>>>>> e9049d50bd97466c593050f338ae3afb8a73ab61
     static void IRAM_ATTR Ultrasonic_isr();
     void Start();
     void Ultrasonic();
