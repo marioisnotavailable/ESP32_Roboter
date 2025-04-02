@@ -8,49 +8,58 @@ bool Roboter::state2 = false;
 unsigned long Roboter::begin = 0;
 float Roboter::distance = 0;
 
-Roboter::Roboter(char const *name){
+Roboter::Roboter(char const *name)
+{
   a = name;
 }
 
-void Roboter::Start() {
-    SerialBT.begin(a);
-    FastLED.addLeds<SK9822, DATA_PIN, CLOCK_PIN, RBG>(leds, NUM_LEDS);
-    pinMode(ADC_UB, INPUT);
-    ledcSetup(0, 16000, 10);
-    ledcSetup(1, 16000, 10);
-    ledcAttachPin(MOTL_Speed, 0);
-    ledcAttachPin(MOTR_Speed, 1);
-    pinMode(TRIGGER_PIN, OUTPUT);
-    pinMode(ECHO_PIN, INPUT);
-    pinMode(MOTR_DIR, OUTPUT);
-    pinMode(MOTL_DIR, OUTPUT);
-    attachInterrupt(digitalPinToInterrupt(ECHO_PIN), Ultrasonic_isr, CHANGE);
-    pinMode(LF_Right_Left, OUTPUT);
-    pinMode(LINEFOLLOW, INPUT);
-    digitalWrite(MOTR_DIR, HIGH);
-    digitalWrite(MOTL_DIR, LOW);
+void Roboter::Start()
+{
+  SerialBT.begin(a);
+  FastLED.addLeds<SK9822, DATA_PIN, CLOCK_PIN, RBG>(leds, NUM_LEDS);
+  pinMode(ADC_UB, INPUT);
+  ledcSetup(0, 16000, 10);
+  ledcSetup(1, 16000, 10);
+  ledcAttachPin(MOTL_Speed, 0);
+  ledcAttachPin(MOTR_Speed, 1);
+  pinMode(TRIGGER_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  pinMode(MOTR_DIR, OUTPUT);
+  pinMode(MOTL_DIR, OUTPUT);
+  attachInterrupt(digitalPinToInterrupt(ECHO_PIN), Ultrasonic_isr, CHANGE);
+  pinMode(LF_Right_Left, OUTPUT);
+  pinMode(LINEFOLLOW, INPUT);
+  digitalWrite(MOTR_DIR, HIGH);
+  digitalWrite(MOTL_DIR, LOW);
 }
 
-void Roboter::Ultrasonic() {
-    if (!state2) {
-        digitalWrite(TRIGGER_PIN, HIGH);
-    }
+void Roboter::Ultrasonic()
+{
+  if (!state2)
+  {
+    digitalWrite(TRIGGER_PIN, HIGH);
+  }
 
-    if ((micros() - start >= 4) && (digitalRead(TRIGGER_PIN) == HIGH)) {
-        digitalWrite(TRIGGER_PIN, LOW);
-        state2 = true;
-        start = micros();
-    }
+  if ((micros() - start >= 4) && (digitalRead(TRIGGER_PIN) == HIGH))
+  {
+    digitalWrite(TRIGGER_PIN, LOW);
+    state2 = true;
+    start = micros();
+  }
 }
 
-void IRAM_ATTR Roboter::Ultrasonic_isr() {
-    if (!state1) {
-        begin = micros();
-    } else {
-        distance = (micros() - begin) / 2 * 0.033f;
-        state2 = false;
-    }
-    state1 = !state1;
+void IRAM_ATTR Roboter::Ultrasonic_isr()
+{
+  if (!state1)
+  {
+    begin = micros();
+  }
+  else
+  {
+    distance = (micros() - begin) / 2 * 0.033f;
+    state2 = false;
+  }
+  state1 = !state1;
 }
 
 void Roboter::VoltageMonitoring()
@@ -143,18 +152,23 @@ void Roboter::LoadingProgramm()
       leds[i] = CRGB::Green;
     }
     FastLED.show();
+  }
 }
 
-void Roboter::Linefollowerfn() {
-    if (distance < 10) {
-        ledcWrite(1, 0);
-        ledcWrite(0, 0);
-    }
-    status = !status;
-    digitalWrite(LF_Right_Left, status);
-    int sensorValue = analogRead(LINEFOLLOW);
-    richtung = (sensorValue > 1500) ? ((richtung != 2) ? 0 : richtung) : ((richtung != 1) ? 1 : 2);
-    
-    ledcWrite(1, (richtung == 2) ? 1024 / 1.6 : (richtung == 1) ? (512 / 2.2) + 60 : 1024 / 2);
-    ledcWrite(0, (richtung == 1) ? 1024 / 1.6 : (richtung == 2) ? 512 / 2.2 : 1024 / 2);
+void Roboter::Linefollowerfn()
+{
+  if (distance < 10)
+  {
+    ledcWrite(1, 0);
+    ledcWrite(0, 0);
+  }
+  status = !status;
+  digitalWrite(LF_Right_Left, status);
+  int sensorValue = analogRead(LINEFOLLOW);
+  richtung = (sensorValue > 1500) ? ((richtung != 2) ? 0 : richtung) : ((richtung != 1) ? 1 : 2);
+
+  ledcWrite(1, (richtung == 2) ? 1024 / 1.6 : (richtung == 1) ? (512 / 2.2) + 60
+                                                              : 1024 / 2);
+  ledcWrite(0, (richtung == 1) ? 1024 / 1.6 : (richtung == 2) ? 512 / 2.2
+                                                              : 1024 / 2);
 }

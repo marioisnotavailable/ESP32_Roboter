@@ -33,7 +33,8 @@
 #define LINEFOLLOW 36
 #define LF_Right_Left 12
 
-class Roboter {
+class Roboter
+{
 private:
     const char *a;
     static bool state1, state2;
