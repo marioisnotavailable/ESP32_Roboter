@@ -19,6 +19,7 @@ void IRAM_ATTR timerISR();
 hw_timer_t *timer = NULL;
 
 void initWiFi();
+void initTelnet();
 void loopTelnet();
 
 void setup(){
@@ -77,7 +78,7 @@ void OTA(void *parameter)
 
 void initWiFi(){
   WiFi.mode(WIFI_STA);
-  WiFi.softAP(WIFI_SSID,WIFI_PASSWORD);
+  WiFi.begin(WIFI_SSID,WIFI_PASSWORD);
 
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print('.');
