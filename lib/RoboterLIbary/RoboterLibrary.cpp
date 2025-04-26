@@ -1,9 +1,5 @@
 #include "RoboterLibrary.h"
 
-BluetoothSerial SerialBT;
-CRGB leds[NUM_LEDS];
-Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_2_4MS, TCS34725_GAIN_4X);
-
 bool Roboter::state1 = false;
 bool Roboter::state2 = false;
 unsigned long Roboter::begin = 0;
@@ -14,7 +10,7 @@ Roboter::Roboter(char const *name)
   a = name;
 }
 
-void Roboter::Start()
+void Roboter::init()
 {
   SerialBT.begin(a);
   FastLED.addLeds<SK9822, DATA_PIN, CLOCK_PIN, RBG>(leds, NUM_LEDS);
@@ -71,7 +67,6 @@ void Roboter::VoltageMonitoring()
   {
     newbatterie += analogRead(ADC_UB);
     count++;
-    SerialBT.print("a");
     if (count >= 200)
     {
       newbatterie = newbatterie / 200 * (VOLTAGE_LEVEL * (R2 + R1) / R2);
@@ -228,42 +223,12 @@ void Roboter::Linefollowerfn()
 void Roboter::Colorsensor(){
   digitalWrite(COLORLED, HIGH);
 
-  tcs.getRawData(&r, &g, &b, &c);
-  n_r = (float)r / c * 255;
-  n_g = (float)g / c * 255;
-  n_b = (float)b / c * 255;
-  Serial.printf("R: %f G: %f B: %f C: %d\n", n_r, n_g, n_b, c);
+  tcs.getRGB(&r, &g, &b);
+  Serial.printf("R: %f G: %f B: %f\n", r, g, b);
 
-  if (r > 120 && g > 120 && b > 120 || r < 60 && g < 60 && b < 60)
-  {
-    for (int i = 0; i < NUM_LEDS; i++)
-        {
-          leds[i] = CRGB::Black;
-        }
-        FastLED.show();
-  }
-  else if (b > 100)
-  {
-    for (int i = 0; i < NUM_LEDS; i++)
-        {
-          leds[i] = CRGB::Blue;
-        }
-        FastLED.show();
-  }
-  else if (g > 150)
-  {
-    for (int i = 0; i < NUM_LEDS; i++)
-        {
-          leds[i] = CRGB::Green;
-        }
-        FastLED.show();
-  }
-  else if (r > 120)
-  {
-    for (int i = 0; i < NUM_LEDS; i++)
-        {
-          leds[i] = CRGB::Red;
-        }
-        FastLED.show();
-  }
+  for (int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = CRGB(r, g, b);
+    }
+    FastLED.show();
 }

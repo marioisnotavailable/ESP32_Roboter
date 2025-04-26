@@ -39,6 +39,10 @@
 class Roboter
 {
 private:
+    BluetoothSerial SerialBT;
+    CRGB leds[NUM_LEDS];
+    Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_2_4MS, TCS34725_GAIN_4X);
+
     const char *a;
     static bool state1, state2;
     static unsigned long begin;
@@ -49,14 +53,13 @@ private:
     float newbatterie = 0;
     bool status = false;
     uint8_t richtung = 0;
-    uint16_t r, g, b, c;
-    float n_r, n_g, n_b;
+    float r, g, b;
 
 public:
     Roboter() : a("Robo") {}
     Roboter(const char *);
     static void IRAM_ATTR Ultrasonic_isr();
-    void Start();
+    void init();
     void Ultrasonic();
     void VoltageMonitoring();
     void Linefollowerfn();

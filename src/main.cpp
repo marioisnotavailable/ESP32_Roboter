@@ -16,19 +16,15 @@ void setup(){
 
   //initWiFi();
   
-  Roby.Start();
+  Roby.init();
 }
 
 void loop(){
   //ArduinoOTA.handle();
   /*Roby.VoltageMonitoring();
   Roby.Ultrasonic();
-  Roby.Linefollowerfn();
-  Roby.Colorsensor();*/
-
-  delay(1000);
-  digitalWrite(COLORLED,!digitalRead(COLORLED));
-
+  Roby.Linefollowerfn();*/
+  Roby.Colorsensor();
 }
 
 
