@@ -220,15 +220,16 @@ void Roboter::Linefollowerfn()
   }
 }
 
-void Roboter::Colorsensor(){
+void Roboter::Colorsensor()
+{
   digitalWrite(COLORLED, HIGH);
 
   tcs.getRGB(&r, &g, &b);
   Serial.printf("R: %f G: %f B: %f\n", r, g, b);
 
   for (int i = 0; i < NUM_LEDS; i++)
-    {
-      leds[i] = CRGB(r, g, b);
-    }
-    FastLED.show();
+  {
+    leds[i] = CRGB(r, g, b);
+  }
+  FastLED.show();
 }
