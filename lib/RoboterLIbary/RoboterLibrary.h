@@ -4,6 +4,7 @@
 #include <FastLED.h>
 #include <Arduino.h>
 #include <BluetoothSerial.h>
+#include <Adafruit_TCS34725.h>
 
 #define NUM_LEDS 4
 #define DATA_PIN 23
@@ -33,6 +34,8 @@
 #define LINEFOLLOW 36
 #define LF_Right_Left 12
 
+#define COLORLED 13
+
 class Roboter
 {
 private:
@@ -46,6 +49,8 @@ private:
     float newbatterie = 0;
     bool status = false;
     uint8_t richtung = 0;
+    uint16_t r, g, b, c;
+    float n_r, n_g, n_b;
 
 public:
     Roboter() : a("Robo") {}
@@ -56,6 +61,7 @@ public:
     void VoltageMonitoring();
     void Linefollowerfn();
     void LoadingProgramm();
+    void Colorsensor();
 };
 
 #endif // ROBOTERLIBRARY_H

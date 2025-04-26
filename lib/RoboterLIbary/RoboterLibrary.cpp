@@ -2,6 +2,7 @@
 
 BluetoothSerial SerialBT;
 CRGB leds[NUM_LEDS];
+Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_2_4MS, TCS34725_GAIN_4X);
 
 bool Roboter::state1 = false;
 bool Roboter::state2 = false;
@@ -31,6 +32,8 @@ void Roboter::Start()
   pinMode(LINEFOLLOW, INPUT);
   digitalWrite(MOTR_DIR, HIGH);
   digitalWrite(MOTL_DIR, LOW);
+  tcs.begin();
+  pinMode(COLORLED, OUTPUT);
 }
 
 void Roboter::Ultrasonic()
@@ -56,7 +59,7 @@ void IRAM_ATTR Roboter::Ultrasonic_isr()
   }
   else
   {
-    distance = (micros() - begin) / 2 * 0.033f;
+    distance = (micros() - begin) / 2 * 0.033;
     state2 = false;
   }
   state1 = !state1;
@@ -157,18 +160,110 @@ void Roboter::LoadingProgramm()
 
 void Roboter::Linefollowerfn()
 {
-  if (distance < 10)
+  if (status == false)
+  {
+    status = !status;
+    digitalWrite(LF_Right_Left, HIGH);
+    if (analogRead(LINEFOLLOW) > 700)
+    {
+      if (richtung != 2)
+      {
+        richtung = 0;
+      }
+    }
+    else
+    {
+      if (richtung != 2)
+      {
+        richtung = 1;
+      }
+    }
+  }
+  else
+  {
+    status = !status;
+    digitalWrite(LF_Right_Left, LOW);
+    if (analogRead(LINEFOLLOW) > 700)
+    {
+      if (richtung != 1)
+      {
+        richtung = 0;
+      }
+    }
+    else
+    {
+      if (richtung != 1)
+      {
+        richtung = 2;
+      }
+    }
+  }
+  if (distance < 8)
   {
     ledcWrite(1, 0);
     ledcWrite(0, 0);
   }
-  status = !status;
-  digitalWrite(LF_Right_Left, status);
-  int sensorValue = analogRead(LINEFOLLOW);
-  richtung = (sensorValue > 1500) ? ((richtung != 2) ? 0 : richtung) : ((richtung != 1) ? 1 : 2);
+  else
+  {
+    switch (richtung)
+    {
+    case 0:
+      ledcWrite(1, 1024 / 2.5);
+      ledcWrite(0, 1024 / 2.5 + 60);
+      break;
+    case 1:
+      ledcWrite(0, 1024 / 1.6 + 60);
+      ledcWrite(1, (512 / 2.2));
+      break;
+    case 2:
+      ledcWrite(1, 1024 / 1.6);
+      ledcWrite(0, 512 / 2.2 + 60);
+      break;
+    default:
+      break;
+    }
+  }
+}
 
-  ledcWrite(1, (richtung == 2) ? 1024 / 1.6 : (richtung == 1) ? (512 / 2.2) + 60
-                                                              : 1024 / 2);
-  ledcWrite(0, (richtung == 1) ? 1024 / 1.6 : (richtung == 2) ? 512 / 2.2
-                                                              : 1024 / 2);
+void Roboter::Colorsensor(){
+  digitalWrite(COLORLED, HIGH);
+
+  tcs.getRawData(&r, &g, &b, &c);
+  n_r = (float)r / c * 255;
+  n_g = (float)g / c * 255;
+  n_b = (float)b / c * 255;
+  Serial.printf("R: %f G: %f B: %f C: %d\n", n_r, n_g, n_b, c);
+
+  if (r > 120 && g > 120 && b > 120 || r < 60 && g < 60 && b < 60)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+        {
+          leds[i] = CRGB::Black;
+        }
+        FastLED.show();
+  }
+  else if (b > 100)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+        {
+          leds[i] = CRGB::Blue;
+        }
+        FastLED.show();
+  }
+  else if (g > 150)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+        {
+          leds[i] = CRGB::Green;
+        }
+        FastLED.show();
+  }
+  else if (r > 120)
+  {
+    for (int i = 0; i < NUM_LEDS; i++)
+        {
+          leds[i] = CRGB::Red;
+        }
+        FastLED.show();
+  }
 }
