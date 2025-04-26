@@ -43,7 +43,7 @@ private:
     CRGB leds[NUM_LEDS];
     Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_2_4MS, TCS34725_GAIN_4X);
 
-    const char *a;
+    const char *name;
     static bool state1, state2;
     static unsigned long begin;
     static float distance;
@@ -56,7 +56,7 @@ private:
     float r, g, b;
 
 public:
-    Roboter() : a("Robo") {}
+    Roboter() : name("Robo") {}
     Roboter(const char *);
     static void IRAM_ATTR Ultrasonic_isr();
     void init();

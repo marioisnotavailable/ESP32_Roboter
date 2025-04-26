@@ -7,12 +7,12 @@ float Roboter::distance = 0;
 
 Roboter::Roboter(char const *name)
 {
-  a = name;
+  this->name;
 }
 
 void Roboter::init()
 {
-  SerialBT.begin(a);
+  SerialBT.begin(name);
   FastLED.addLeds<SK9822, DATA_PIN, CLOCK_PIN, RBG>(leds, NUM_LEDS);
   pinMode(ADC_UB, INPUT);
   ledcSetup(0, 16000, 10);
@@ -63,7 +63,7 @@ void IRAM_ATTR Roboter::Ultrasonic_isr()
 
 void Roboter::VoltageMonitoring()
 {
-  if (millis() - starttime >= WAITTIME)
+  if (millis() % WAITTIME == 0)
   {
     newbatterie += analogRead(ADC_UB);
     count++;
@@ -100,7 +100,6 @@ void Roboter::VoltageMonitoring()
       count = 0;
       newbatterie = 0;
     }
-    starttime = millis();
   }
   if (batterie_low_cont >= 3)
   {
@@ -225,6 +224,10 @@ void Roboter::Colorsensor()
   digitalWrite(COLORLED, HIGH);
 
   tcs.getRGB(&r, &g, &b);
+  if(micros() % 1000 == 0)
+  {
+    Serial.printf("R: %f G: %f B: %f\n", r, g, b);
+  }
   Serial.printf("R: %f G: %f B: %f\n", r, g, b);
 
   for (int i = 0; i < NUM_LEDS; i++)
