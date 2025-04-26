@@ -30,6 +30,21 @@ void Roboter::init()
   digitalWrite(MOTL_DIR, LOW);
   tcs.begin();
   pinMode(COLORLED, OUTPUT);
+
+  WiFi.mode(WIFI_STA); // Station mode
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+  Serial.println("Connecting to WiFi...");
+  int retryCount = 0;
+  while (WiFi.status() != WL_CONNECTED && retryCount < 10) {
+    delay(1000);
+    Serial.println(".");
+    retryCount++;
+  }
+
+  ArduinoOTA.setHostname("ESP32_Robot");
+  ArduinoOTA.setPassword("1234567890");
+  ArduinoOTA.begin();
 }
 
 void Roboter::Ultrasonic()
